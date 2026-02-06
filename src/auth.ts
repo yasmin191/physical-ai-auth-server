@@ -1,15 +1,13 @@
-import { betterAuth, type BetterAuthOptions } from "better-auth";
-import Database, { type Database as DatabaseType } from "better-sqlite3";
+import { betterAuth } from "better-auth";
+import Database from "better-sqlite3";
 import path from "path";
 import { fileURLToPath } from "url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const dbPath = path.join(__dirname, "..", "data", "auth.db");
 
-const db: DatabaseType = new Database(dbPath);
-
 export const auth = betterAuth({
-  database: db,
+  database: new Database(dbPath) as any,
   emailAndPassword: {
     enabled: true,
     requireEmailVerification: false,
@@ -22,7 +20,7 @@ export const auth = betterAuth({
         required: false,
       },
       programmingLanguages: {
-        type: "string", // JSON array stored as string
+        type: "string",
         required: false,
       },
       rosExperience: {
@@ -39,7 +37,7 @@ export const auth = betterAuth({
         required: false,
       },
       hardwarePlatforms: {
-        type: "string", // JSON array stored as string
+        type: "string",
         required: false,
       },
       hasJetson: {
@@ -52,7 +50,7 @@ export const auth = betterAuth({
       },
       // Learning goals
       learningGoals: {
-        type: "string", // JSON array stored as string
+        type: "string",
         required: false,
       },
       preferredPace: {
@@ -68,5 +66,3 @@ export const auth = betterAuth({
     "https://physical-ai-textbook.vercel.app",
   ],
 });
-
-export type Auth = typeof auth;
