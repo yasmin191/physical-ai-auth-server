@@ -1,20 +1,23 @@
 import { betterAuth } from "better-auth";
-import Database from "better-sqlite3";
-import path from "path";
-import { fileURLToPath } from "url";
+import { createClient } from "@libsql/client";
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const dbPath = path.join(__dirname, "..", "data", "auth.db");
+// Turso database client
+const tursoClient = createClient({
+  url: process.env.TURSO_DATABASE_URL || "",
+  authToken: process.env.TURSO_AUTH_TOKEN || "",
+});
 
 export const auth = betterAuth({
-  database: new Database(dbPath) as any,
+  database: {
+    type: "sqlite",
+    client: tursoClient as any,
+  },
   emailAndPassword: {
     enabled: true,
     requireEmailVerification: false,
   },
   user: {
     additionalFields: {
-      // Software background
       programmingExperience: {
         type: "string",
         required: false,
@@ -31,7 +34,6 @@ export const auth = betterAuth({
         type: "string",
         required: false,
       },
-      // Hardware background
       roboticsExperience: {
         type: "string",
         required: false,
@@ -48,7 +50,6 @@ export const auth = betterAuth({
         type: "boolean",
         required: false,
       },
-      // Learning goals
       learningGoals: {
         type: "string",
         required: false,
