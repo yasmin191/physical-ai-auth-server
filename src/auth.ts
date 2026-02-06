@@ -1,13 +1,15 @@
-import { betterAuth } from "better-auth";
-import Database from "better-sqlite3";
+import { betterAuth, type BetterAuthOptions } from "better-auth";
+import Database, { type Database as DatabaseType } from "better-sqlite3";
 import path from "path";
 import { fileURLToPath } from "url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const dbPath = path.join(__dirname, "..", "data", "auth.db");
 
+const db: DatabaseType = new Database(dbPath);
+
 export const auth = betterAuth({
-  database: new Database(dbPath),
+  database: db,
   emailAndPassword: {
     enabled: true,
     requireEmailVerification: false,
